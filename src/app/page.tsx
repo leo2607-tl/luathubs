@@ -40,7 +40,7 @@ const Home = () => {
         }}
       >
         <source
-          src={isDesktop ? 'https://videos.pexels.com/video-files/8135024/8135024-uhd_1440_2732_25fps.mp4' : 'https://videos.pexels.com/video-files/8135024/8135024-uhd_1440_2732_25fps.mp4'}
+          src={isDesktop ? 'https://videos.pexels.com/video-files/5636977/5636977-uhd_2560_1440_24fps.mp4' : 'https://videos.pexels.com/video-files/8135024/8135024-uhd_1440_2732_25fps.mp4'}
           type="video/mp4"
         />
       </video>
