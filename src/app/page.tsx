@@ -72,9 +72,9 @@ const Home = () => {
     return randomCards;
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     getRandomCards();
-  }, [getRandomCards]);
+  }, [getRandomCards]); 
 
   const handleNavigation = (path: string) => {
     router.push(path); 
