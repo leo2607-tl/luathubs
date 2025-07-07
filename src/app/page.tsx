@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react"; 
 import { useRouter } from "next/navigation";
 
 const Home = () => {
@@ -18,37 +18,9 @@ const Home = () => {
   ]);
   const [previousHighlightedCards, setPreviousHighlightedCards] = useState<number[]>([]);
 
-  const router = useRouter(); 
+  const router = useRouter();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const randomCards = getRandomCards();
-
-      setCardColors((prevColors) => {
-        const newColors = [...prevColors];
-        randomCards.forEach((cardIndex) => {
-          newColors[cardIndex] = getRandomColor();
-        });
-        return newColors;
-      });
-
-      setHighlightedCards(randomCards);
-
-      setPreviousHighlightedCards(randomCards);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [previousHighlightedCards]);
-
-  const getRandomColor = () => {
-    const colors = [
-      "bg-gray-600", "bg-gray-800", "bg-purple-800", "bg-indigo-800", "bg-blue-900", "bg-green-800"
-    ];
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    return color;
-  };
-
-  const getRandomCards = () => {
+  const getRandomCards = useCallback(() => {
     const availableCards = Array.from({ length: 9 }, (_, index) => index).filter(
       (index) => !previousHighlightedCards.includes(index)
     );
@@ -70,14 +42,37 @@ const Home = () => {
     }
 
     return randomCards;
-  };
+  }, [previousHighlightedCards]); 
 
   useEffect(() => {
-    getRandomCards();
+    const interval = setInterval(() => {
+      const randomCards = getRandomCards();
+
+      setCardColors((prevColors) => {
+        const newColors = [...prevColors];
+        randomCards.forEach((cardIndex) => {
+          newColors[cardIndex] = getRandomColor();
+        });
+        return newColors;
+      });
+
+      setHighlightedCards(randomCards);
+      setPreviousHighlightedCards(randomCards);
+    }, 2000);
+
+    return () => clearInterval(interval);
   }, [getRandomCards]); 
 
+  const getRandomColor = () => {
+    const colors = [
+      "bg-gray-600", "bg-gray-800", "bg-purple-800", "bg-indigo-800", "bg-blue-900", "bg-green-800"
+    ];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    return color;
+  };
+
   const handleNavigation = (path: string) => {
-    router.push(path); 
+    router.push(path);
   };
 
   return (

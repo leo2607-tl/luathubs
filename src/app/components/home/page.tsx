@@ -1,6 +1,7 @@
-'use client'
+"use client";
 
 import { useState, useEffect } from "react";
+import Image from 'next/image'; 
 
 interface User {
   id: string;
@@ -18,12 +19,12 @@ interface NewUserInfo {
 }
 
 export default function Home() {
-  const [user, setUser] = useState<User | null>(null); 
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [newUserInfo, setNewUserInfo] = useState<NewUserInfo>({ name: "", bio: "", email: "", image: null}); 
-  const [imageFile, setImageFile] = useState<File | null>(null); 
+  const [newUserInfo, setNewUserInfo] = useState<NewUserInfo>({ name: "", bio: "", email: "", image: null });
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -104,7 +105,7 @@ export default function Home() {
             bio: newUserInfo.bio, 
             email: newUserInfo.email, 
             image: data.image 
-          }); 
+          });
           setIsEditing(false);
         } else {
           setError(data.message || "Có lỗi xảy ra khi cập nhật thông tin");
@@ -132,11 +133,13 @@ export default function Home() {
             </h2>
             <div className="text-center mb-6">
               {user.image ? (
-                <img
-                  src={user.image}
-                  alt="User Avatar"
-                  className="w-32 h-32 rounded-full mx-auto"
-                />
+              <Image
+                src={user.image}
+                alt="User Avatar"
+                width={300}  
+                height={300}  
+                className="rounded-full mx-auto"  
+              />
               ) : (
                 <div className="w-32 h-32 rounded-full bg-gray-300 mx-auto"></div>
               )}
