@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { get } from "http";
 
 const Home = () => {
   const [highlightedCards, setHighlightedCards] = useState<number[]>([]);
@@ -49,12 +50,6 @@ const Home = () => {
   };
 
   const getRandomCards = () => {
-    const rows = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8], 
-    ];
-
     const availableCards = Array.from({ length: 9 }, (_, index) => index).filter(
       (index) => !previousHighlightedCards.includes(index)
     );
@@ -78,9 +73,12 @@ const Home = () => {
     return randomCards;
   };
 
-  // Handle navigate to login/signup screen
+  useEffect(() => { 
+    getRandomCards();
+  }, [getRandomCards]);
+
   const handleNavigation = (path: string) => {
-    router.push(path); // Sử dụng useRouter để điều hướng
+    router.push(path); 
   };
 
   return (
