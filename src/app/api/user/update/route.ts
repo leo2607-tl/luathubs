@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../lib/prisma";
 import jwt from "jsonwebtoken";
-import fs from "fs";
-import path from "path";
 
 interface DecodedToken {
   userId: string;  
