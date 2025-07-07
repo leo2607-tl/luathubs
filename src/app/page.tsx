@@ -18,7 +18,7 @@ const Home = () => {
   ]);
   const [previousHighlightedCards, setPreviousHighlightedCards] = useState<number[]>([]);
 
-  const router = useRouter(); // Khởi tạo useRouter
+  const router = useRouter(); 
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -83,7 +83,7 @@ export default function Home() {
 
         const data = await response.json();
         if (response.ok) {
-          setUser({ ...user, ...newUserInfo, image: data.image }); // Cập nhật lại thông tin người dùng
+          setUser({ ...user, ...newUserInfo, image: data.image }); 
           setIsEditing(false);
         } else {
           setError(data.message || "Có lỗi xảy ra khi cập nhật thông tin");
