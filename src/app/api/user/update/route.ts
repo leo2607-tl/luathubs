@@ -9,7 +9,7 @@ interface DecodedToken {
   [key: string]: string; 
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30';
 
 export async function PUT(req: NextRequest) {
   const token = req.headers.get("authorization")?.split(" ")[1]; 
@@ -31,16 +31,11 @@ export async function PUT(req: NextRequest) {
     let imageUrl = null;
 
     if (image) {
-      const uploadsDir = path.join(process.cwd(), 'public/uploads');
-      
-      if (!fs.existsSync(uploadsDir)) {
-        fs.mkdirSync(uploadsDir, { recursive: true });
-      }
+      const arrayBuffer = await image.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const base64Image = buffer.toString('base64');
 
-      imageUrl = `/uploads/${image.name}`;
-      const imagePath = path.join(uploadsDir, image.name);
-      const buffer = Buffer.from(await image.arrayBuffer());
-      fs.writeFileSync(imagePath, buffer);
+      imageUrl = `data:${image.type};base64,${base64Image}`;
     }
 
     const updatedUser = await prisma.user.update({

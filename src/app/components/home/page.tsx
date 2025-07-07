@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from 'next/image'; 
+import Image from 'next/image';
 
 interface User {
   id: string;
@@ -99,12 +99,12 @@ export default function Home() {
 
         const data = await response.json();
         if (response.ok) {
-          setUser({ 
-            id: user!.id, 
-            name: newUserInfo.name, 
-            bio: newUserInfo.bio, 
-            email: newUserInfo.email, 
-            image: data.image 
+          setUser({
+            id: user!.id,
+            name: newUserInfo.name,
+            bio: newUserInfo.bio,
+            email: newUserInfo.email,
+            image: data.image || user!.image, 
           });
           setIsEditing(false);
         } else {
@@ -133,13 +133,23 @@ export default function Home() {
             </h2>
             <div className="text-center mb-6">
               {user.image ? (
-              <Image
-                src={user.image}
-                alt="User Avatar"
-                width={300}  
-                height={300}  
-                className="rounded-full mx-auto"  
-              />
+                user.image.startsWith("data:image") ? (
+                  <img
+                    src={user.image}
+                    alt="User Avatar"
+                    className="rounded-full mx-auto"
+                    width={300}
+                    height={300}
+                  />
+                ) : (
+                  <Image
+                    src={user.image}
+                    alt="User Avatar"
+                    width={300}
+                    height={300}
+                    className="rounded-full mx-auto"
+                  />
+                )
               ) : (
                 <div className="w-32 h-32 rounded-full bg-gray-300 mx-auto"></div>
               )}
