@@ -1,9 +1,13 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../lib/prisma";
 import jwt from "jsonwebtoken";
 import fs from "fs";
 import path from "path";
+
+interface DecodedToken {
+  userId: string;  
+  [key: string]: string; 
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
@@ -15,8 +19,9 @@ export async function PUT(req: NextRequest) {
   }
 
   try {
-    const decoded: any = jwt.verify(token, JWT_SECRET); 
+    const decoded: DecodedToken = jwt.verify(token, JWT_SECRET) as DecodedToken;
     const userId = decoded.userId;
+
     const formData = await req.formData();
     const name = formData.get('name') as string;
     const bio = formData.get('bio') as string;

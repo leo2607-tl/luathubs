@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 interface DecodedToken {
   userId: string;  
-  [key: string]: any;
+  [key: string]: string;
 }
 
 export async function GET(req: NextRequest) {

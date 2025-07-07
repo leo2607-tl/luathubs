@@ -1,14 +1,29 @@
-"use client";
+'use client'
 
 import { useState, useEffect } from "react";
 
+interface User {
+  id: string;
+  email: string;
+  name: string | null;
+  bio: string | null;
+  image: string | null;
+}
+
+interface NewUserInfo {
+  name: string;
+  bio: string;
+  email: string;
+  image: string | null;
+}
+
 export default function Home() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null); 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [newUserInfo, setNewUserInfo] = useState<any>({ name: "", bio: "", email: "" });
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [newUserInfo, setNewUserInfo] = useState<NewUserInfo>({ name: "", bio: "", email: "", image: null}); 
+  const [imageFile, setImageFile] = useState<File | null>(null); 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -26,7 +41,7 @@ export default function Home() {
           const data = await response.json();
           if (response.ok) {
             setUser(data);
-            setNewUserInfo({ name: data.name, bio: data.bio, email: data.email });
+            setNewUserInfo({ name: data.name || "", bio: data.bio || "", email: data.email || "", image: data.image || null });
           } else {
             setError(data.message || "Có lỗi xảy ra khi lấy thông tin người dùng");
           }
@@ -51,7 +66,7 @@ export default function Home() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setNewUserInfo((prevState: any) => ({ ...prevState, [name]: value }));
+    setNewUserInfo((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +98,13 @@ export default function Home() {
 
         const data = await response.json();
         if (response.ok) {
-          setUser({ ...user, ...newUserInfo, image: data.image }); 
+          setUser({ 
+            id: user!.id, 
+            name: newUserInfo.name, 
+            bio: newUserInfo.bio, 
+            email: newUserInfo.email, 
+            image: data.image 
+          }); 
           setIsEditing(false);
         } else {
           setError(data.message || "Có lỗi xảy ra khi cập nhật thông tin");
